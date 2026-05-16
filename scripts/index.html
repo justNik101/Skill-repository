@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basic Calculator</title>
+  </head>
+  <body>
+    <script>
+      window["ai_edge_gallery_get_result"] = async (data) => {
+        try {
+          const jsonData = JSON.parse(data);
+          if (!jsonData.expression) {
+            return JSON.stringify({ error: "No expression provided to calculate." });
+          }
+
+          // Evaluate the mathematical expression safely
+          const result = Function('"use strict";return (' + jsonData.expression + ')')();
+
+          return JSON.stringify({ result: result });
+        } catch (e) {
+          console.error(e);
+          return JSON.stringify({ error: `Failed to calculate expression: ${e.message}` });
+        }
+      };
+    </script>
+  </body>
+</html>
